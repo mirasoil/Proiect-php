@@ -1,0 +1,13 @@
+in tbl_prodct -> adaug descrierea => toate functiile trebuie editate (+parametru descriere)
+la crearea interfetei de editare - descrierea produselor este input 
+
+Functii de modificat:  edit, create - adaugare $descriere + params
+!Modificare phpMyAdmin tabela-tbl_product
+
+index - before footer - do smth pls :'(
+
+Pentru useri - just do the same :P
+
+
+
+Trebuie sa fac interfata pentru Account - editeaza user, schimba parola
