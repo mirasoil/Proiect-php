@@ -55,6 +55,7 @@ class Admin extends DBController{
 	}
 
 
+
 	function getProductByCode($product_code){
 		//returneaza produsul in functie de codul introdus, trimis ca referinta (GET)
 		$query = "SELECT * FROM tbl_product WHERE code=?";
@@ -179,6 +180,99 @@ class Admin extends DBController{
 		return true;
 
 	}*/
+
+	function getAllUsers(){
+		//functie ce returneaza toate produsele din tabela
+		$query = "SELECT * FROM users";
+
+		$userResult = $this->getDBResult($query);
+		foreach ($userResult as $key => $value) {
+			//generam interfata produselor ce pot fi editate
+			?>
+			<div class="user-item">
+			<form method="POST" action="executa.php">
+				<!---Camp editabil alocat dinamic pentru fiecare proprietate--->
+				<input type="text" name="user-id" value="<?php echo $userResult[$key]["id"]; ?>">
+				<label for="un">
+					Username
+				</label>
+				<input type="text" name="username"value="<?php echo $userResult[$key]["username"]; ?>" id="un"/><br>
+				<label for="ue">
+					User Email
+				</label>
+				<input type="text" name="email"value="<?php echo $userResult[$key]["email"]; ?>" id="ue"/>
+				<br>
+				<div class="product-action">
+				<input type="submit"  value="Edit User" class="btnEditUser" name="edit-user"/>
+			</div>
+			</form>
+		</div> 
+		<br>
+
+			<?php
+		}
+		return true;
+	}
+
+function editUser($id, $newUsername,  $email){
+		//modifica datele unui produs
+		$query = "UPDATE users SET  username=?, email=? WHERE users.username=? ";
+
+		$params = array(
+			array(
+				"param_type" => "i",
+				"param_value" => $id
+			),
+			array(
+				"param_type" => "s",
+				"param_value" => $newUsername
+			),
+			array(
+				"param_type" => "s",
+				"param_value" => $email
+			)
+		);
+
+		$this->updateDB($query, $params);
+		
+	}
+
+
+	function deleteUser($id){
+		$query = "DELETE FROM users WHERE id=?";
+
+		$params = array(
+			array(
+				"param_type" => "i",
+				"param_value" => $id
+			)
+		);
+
+		$this->updateDB($query, $params);
+	}
+
+	function createUser($username, $password, $email){
+		$query = 'INSERT INTO users(username, password, email) VALUES (?, ?, ?)';
+
+		$params = array(
+			array(
+				"param_type" => "s",
+				"param_value" => $username
+			),
+			array(
+				"param_type" => "s",
+				"param_value" => $password
+			),
+			array(
+				"param_type" => "s",
+				"param_value" => $email
+			)
+		);
+
+		$this->updateDB($query, $params);
+		
+	}
+
 
 
 }

@@ -11,3 +11,7 @@ Pentru useri - just do the same :P
 
 
 Trebuie sa fac interfata pentru Account - editeaza user, schimba parola
+
+In adminController trebuie functie pentru editare useri - am ramas aici!
+am nevoie de o functie addUser
+butonul addUser nu functioneaza

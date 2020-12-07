@@ -23,4 +23,24 @@ if(isset($desc)){
 }*/
 
 
+
+
+
+
+
+
+//EDIT USER
+if(isset($_POST['edit-user'])){
+	$admin->editUser($_POST['user-id'], $_POST['username'], $_POST['email']);
+	header("Location:controlPanel.php?edited='Successfull' ");
+} else {
+	header("Location:controlPanel.php?edited='Error' ");
+}
+
+
+//ADD USER
+if (isset($_POST['add-user'])) {//butonul Add User
+	$admin->addUser($_POST['user-id'], $_POST['username'], $_POST['email']);
+	header("Location:controlPanel.php?addUser=Succes");
+}
  ?>

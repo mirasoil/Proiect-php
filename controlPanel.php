@@ -35,7 +35,7 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 <div class="container">
 	
 <button onclick="showDiv('lista')">See all products</button>
-<button>See all users</button>
+<button onclick="showDiv('lista-useri')">See all users</button>
 
 <div id="lista"><!---div-ul pentru crearea unui produs nou---->
 	<button onclick="showDiv('new-product')" class="create-product">
@@ -72,13 +72,30 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 	?>
 </div>
 
-</div>
-<!--pop-up <?php 
-//if (isset($_GET['addProduct']) && //$_GET['addProduct'] == 'Success') {
-//	$admin
-//}
 
- ?> -->
+<!---Div-ul pentru afisarea userilor --->
+<div id="lista-useri" style="display: none;">
+	<div id="users">
+	<form action="executa.php" method="post">
+		<label for="user-id">User ID
+		</label>
+		<input type="text" name="user-id" placeholder="User ID" id="user-id" required><br>
+		<label for="username">Username
+		</label>
+		<input type="text" name="username" placeholder="New Username" id="username" required><br>
+		<label for="email">Email
+		</label>
+		<input type="text" name="email" placeholder="New Email" id="email" required><br>
+		
+		<button type="submit" name="add-user">Add User </button>
+		</form>
+</div>
+	<?php 
+	$admin = new Admin();
+	$admin->getAllUsers(); //afisarea propriu-zisa a tuturor produselor
+	?>
+</div>
+</div>
 
 <?php include 'sections/footer.sec.php'; ?>
 <script>
