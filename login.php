@@ -20,7 +20,7 @@ if(!isset($_POST['username'], $_POST['password'])){
 }
 //daca datele au fost trimise, continuam
 
-//if admin or not
+//if admin or not, checkbox-ul adminCheck din login.html face diferenta
 if (isset($_POST['adminCheck'])) {
 	$statement = $con->prepare('SELECT id, password FROM admins WHERE username=?');
 	$_SESSION['accountType'] = 'admin';

@@ -1,17 +1,17 @@
-in tbl_prodct -> adaug descrierea => toate functiile trebuie editate (+parametru descriere)
-la crearea interfetei de editare - descrierea produselor este input 
-
 Functii de modificat:  edit, create - adaugare $descriere + params
-!Modificare phpMyAdmin tabela-tbl_product
 
 index - before footer - do smth pls :'(
 
-Pentru useri - just do the same :P
+Pentru useri - just do the same as for the products although you should not be able to modify users :P
 
 
 
 Trebuie sa fac interfata pentru Account - editeaza user, schimba parola
 
-In adminController trebuie functie pentru editare useri - am ramas aici!
-am nevoie de o functie addUser
-butonul addUser nu functioneaza
+
+
+1.EDIT la useri nu functioneaza
+2.La account nu functioneaza $email, nu se transmite nicaieri prin session =>nu o pot accesa
+3.Butonul de Add to Cart functioneaza doar daca esti logat
+4.Inca nu stiu ce fac in index.php
+5.Pe viitor, Account - nav.sec.php

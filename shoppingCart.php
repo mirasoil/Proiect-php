@@ -13,7 +13,7 @@ class shoppingCart extends DBController{
 
 	function getUserCartItem($user_id){
 		//
-		$query = "SELECT tbl_product.*, tbl_cart.id as cart_id, tbl_cart.quantity FROM tbl_product, tbl_cart WHERE tbl_product.id=tbl_cart.product_id AND tbl_cart.user_id=?";
+		$query = "SELECT tbl_product.*, tbl_cart.id as cart_id, tbl_cart.quantity, tbl_cart.product_id FROM tbl_product, tbl_cart WHERE tbl_product.id=tbl_cart.product_id AND tbl_cart.user_id=?";
 
 		$params = array(
 			array(

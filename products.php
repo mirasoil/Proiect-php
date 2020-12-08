@@ -1,6 +1,6 @@
 <?php 
 require_once "shoppingCart.php";
-
+session_start();
  ?>
 
  <!DOCTYPE html>
