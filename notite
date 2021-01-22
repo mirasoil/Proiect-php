@@ -1,0 +1,17 @@
+Butonul de Delete in cos:
+    -daca am un singur produs si il sterg - sa goleasca cosul (momentan ramane totalul intact - php vs js)
+
+
+ADMIN:
+
+Preluare date formular cu ajax:
+var formData = {
+	'id'             : $('input[name=product-id]').val(),
+	'name'              : $('input[name=product-name]').val(),
+	'code'             : $('input[name=product-code]').val(),
+	'image'             : $('input[name=product-image]').val(),
+	'price'             : $('input[name=product-price]').val(),
+	'stock'             : $('input[name=product-stock]').val(),
+	'desc'             : $('input[name=product-desc]').val()
+};
+

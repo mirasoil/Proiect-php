@@ -10,7 +10,7 @@ class Admin extends DBController{
 		foreach ($productResult as $key => $value) {
 			//generam interfata produselor ce pot fi editate
 			?>
-			<div class="product-item">
+			<div class="product-item" id="delete<?php echo $result['id'];?>">
 			<form method="POST" action="execute.php">
 				<!---Camp editabil alocat dinamic pentru fiecare proprietate--->
 				<input type="hidden" name="product-id" value="<?php echo $productResult[$key]["id"]; ?>">
@@ -24,7 +24,7 @@ class Admin extends DBController{
 				</div>
 
 				<label for="pi">Product Image</label>
-				<input type="text" name="product-image"value="<?php echo $productResult[$key]["image"]; ?>" id="pi"/>
+				<input type="file" name="product-image" id="pi"/>
 				<br>
 				<label for="pp">Product Price</label>
 				<input type="text" name="product-price"value="<?php echo $productResult[$key]["price"]; ?>" id="pp"/>
@@ -37,9 +37,10 @@ class Admin extends DBController{
 				<br>
 				<div class="product-action">
 				<input type="submit"  value="Edit" class="btnEdit" name="edit-product"/>
-				<input type="submit"  value="Delete" class="btnDelete" name="delete-product"/>
+				<input type="submit"  value="Delete" class="btnDelete" id="btnDelete" name="delete-product"/>
 			</div>
 			</form>
+			
 		</div> 
 
 
@@ -48,7 +49,13 @@ class Admin extends DBController{
 		return true;
 	}
 
+function getAllProductsNew(){
+		//functie ce returneaza toate produsele din tabela
+		$query = "SELECT * FROM tbl_product";
 
+		$productResult = $this->getDBResult($query); //in variabila productResult stocam rezultatul query-ului aplicat in tbl_product
+		return $productResult;
+	}
 
 	function getProductByCode($product_code){
 		//returneaza produsul in functie de codul introdus, trimis ca referinta (GET)
@@ -277,3 +284,18 @@ function editUser($id, $newUsername,  $email){
 
 
  ?>
+<!--  <script type="text/javascript">
+function deleteAjax(id){
+     	if(confirm('Are you sure ?')){
+     		$.ajax({
+     			type: "POST",
+     			url : 'delete.php',
+     			data:{delete_id:id},
+     			success: function(data){
+     				$('#delete'+id).hide();
+     			}
+     		});
+     	}
+     }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->

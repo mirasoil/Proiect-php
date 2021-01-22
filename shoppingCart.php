@@ -11,9 +11,12 @@ class shoppingCart extends DBController{
 		return $productResult;
 	}
 
+
+
 	function getUserCartItem($user_id){
-		//
+		//returneaza produsul adaugat in cos de utilizatorul care este logat la momentul respectiv
 		$query = "SELECT tbl_product.*, tbl_cart.id as cart_id, tbl_cart.quantity, tbl_cart.product_id FROM tbl_product, tbl_cart WHERE tbl_product.id=tbl_cart.product_id AND tbl_cart.user_id=?";
+		//selecteaza din tabela produse tot, din tbl_cart doar id-ul, cantitatea si product_id-ul pentru conditia: id-ul produsului din tabela produse trebuie sa corespunda cu id-ul produsului din tabela cos si id-ul utilizatorului sa fie acelasi cu cel din sesiune
 
 		$params = array(
 			array(
@@ -25,6 +28,8 @@ class shoppingCart extends DBController{
 		$cartResult = $this->getDBResult($query, $params);
 		return $cartResult;
 	}
+
+
 
 
 	function getProductByCode($product_code){
@@ -120,7 +125,7 @@ class shoppingCart extends DBController{
 
 
 	function deleteCartItem($cart_id){
-		$query = "DELETE FROM tbl_cart WHERE id=?";
+		$query = "DELETE FROM tbl_cart WHERE product_id=?";
 
 		$params = array(
 			array(

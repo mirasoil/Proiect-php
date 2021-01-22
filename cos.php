@@ -68,7 +68,42 @@ if(!empty($_GET['action'])){
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<!---Script jquery ---->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
 
+//Butonul Delete
+function deleteAjax(id){
+     	if(confirm('Are you sure ?')){
+     		$.ajax({
+     			type: "POST",
+     			url : 'deleteCart.php',
+     			data:{delete_id:id},
+     			success: function(data){
+     				$('#'+id).remove();
+					 //ar trebui sa modific si pretul total, va fi pretul total - cantitatea produsului sters
+     			}
+     		});
+     	}
+     }
+
+//Butonul Empty
+function emptyCart(){
+	if(confirm('Are you sure you want to delete all products from cart ?')){
+		$.ajax({
+			type:"POST",
+			url: 'deleteCart.php',
+			data: {empty_id:<?php echo $user_id; ?>},
+			success: function(data){
+				$('#my_cart').remove();
+				$('#message-success').html('Your shopping cart is empty, please check our <a href="products.php" class="devices">products</a> ! ;)');
+				
+			}
+		})
+	}
+}
+
+</script>
 	
  </head>
  <body>
@@ -88,7 +123,7 @@ if(!empty($_GET['action'])){
 
   ?>
 
-
+<div id="my_cart">
   <table cellpadding="10" cellspacing="1">
 	 <tbody>
 	 <tr>
@@ -104,15 +139,17 @@ if(!empty($_GET['action'])){
 
  ?>
 
-	<tr>
+	<tr id="<?php echo $item['id']; ?>" class="cart-products">
 		 <td style="text-align: left; border-bottom: #F0F0F0 1px solid;"><a href="page.php?page=product&id=<?php echo $item['product_id']; ?>" class="devices"><strong><?php echo $item["name"]; ?></strong></a></td>
 		 <td style="text-align: left; border-bottom: #F0F0F0 1px solid;"><?php echo $item["code"]; ?></td>
 		 <td style="text-align: right; border-bottom: #F0F0F0 1px solid;"><?php echo $item["quantity"]; ?></td>
 		 <td style="text-align: right; border-bottom: #F0F0F0 1px solid;"><?php echo "$".$item["price"]; ?></td>
 		 <td style="text-align: center; border-bottom: #F0F0F0 1px solid;">
-		 	<a href="cos.php?action=remove&id=<?php echo $item["cart_id"]; ?>" class="btnRemoveAction"><i class="fas fa-times-circle"></i>Delete product</a>
+		 	
+			 <?php echo '<input type="button" id="'.$item['id'].'" value="Delete" name="del" onclick="deleteAjax(this.id)">'; ?>
 		 	<span><a href="products.php" class="btnAddAction"><i class="fas fa-cart-plus"></i>Choose another product</a></span>
 		 </td>
+		 <div class="ajaxDiv"></div>
  	</tr>
 
 
@@ -121,13 +158,13 @@ if(!empty($_GET['action'])){
 }
  ?>
 	<tr>
-		 <td colspan="3" align=right><strong>Total:</strong></td>
-		 <td align=right><strong><?php echo "$".$item_total; ?></strong></td>
-		 <td><a id="btnEmpty" href="cos.php?action=empty"><i class="fas fa-trash"></i>Empty Cart</a></td>
+		 <td colspan="3" align='right'><strong>Total:</strong></td>
+		 <td align='right'><strong><?php echo "$".$item_total; ?></strong></td>
+		 <td><a id="btnEmpty" onclick="emptyCart()" href="#"><i class="fas fa-trash"></i>Empty Cart</a></td>
  	</tr>
  	</tbody>
  </table>
-
+</div>
 <?php 
  }else{
  	//daca nu exista nimic in cos, afisam un mesaj prietenos 
@@ -135,7 +172,7 @@ if(!empty($_GET['action'])){
  	";
  }
 ?>
-
+<h1 id="message-success" style='text-align: center; padding: 30px;'></h1>
  <div><a href="products.php" style="text-decoration: none; font-size: 20px;">Go back to shop</a></div>
  <div><a href="logout.php" style="text-decoration: none; font-size: 20px; ">Logout</a></div>
  <div><a href="order.php" style="float: right; font-size: 20px;color: green;" class="btnPlaceOrder">Place order</a></div>
