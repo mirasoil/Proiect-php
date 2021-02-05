@@ -53,23 +53,8 @@ if(!empty($_GET['action'])){
 				break;
 	}
 }
-
-
- ?>
-
- <!DOCTYPE html>
- <html>
- <head>
- 	<title>Shopping Cart</title>
- 	<meta charset="utf-8">
-	<link rel="stylesheet" href="styles/main.css" type="text/css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<!---Script jquery ---->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+include 'sections/header.sec.php';
+?>
 <script>
 
 //Butonul Delete
@@ -80,8 +65,8 @@ function deleteAjax(id){
      			url : 'deleteCart.php',
      			data:{delete_id:id},
      			success: function(data){
-     				$('#'+id).remove();
-					 //ar trebui sa modific si pretul total, va fi pretul total - cantitatea produsului sters
+     				$('#'+id).remove();     //stergem div-ul in care era afisat produsul
+     				$( "#price" ).load(window.location.href + " #price" );    //modificam pretul afisat (dupa stergere acesta se modifica)
      			}
      		});
      	}
@@ -135,6 +120,7 @@ function emptyCart(){
 	 </tr>	
 
  <?php 
+ //generez produsele in cos fara sa mai apelez functia
   foreach ($cartItem as $item) {
 
  ?>
@@ -145,11 +131,11 @@ function emptyCart(){
 		 <td style="text-align: right; border-bottom: #F0F0F0 1px solid;"><?php echo $item["quantity"]; ?></td>
 		 <td style="text-align: right; border-bottom: #F0F0F0 1px solid;"><?php echo "$".$item["price"]; ?></td>
 		 <td style="text-align: center; border-bottom: #F0F0F0 1px solid;">
-		 	
-			 <?php echo '<input type="button" id="'.$item['id'].'" value="Delete" name="del" onclick="deleteAjax(this.id)">'; ?>
+		 	<!---am setat un id unic pentru fiecare div, egal cu id-ul produsului pentru a-l accesa la delete--->
+			 <?php echo '<button id="'.$item['id'].'" onclick="deleteAjax(this.id)">Delete</button>'; ?>
 		 	<span><a href="products.php" class="btnAddAction"><i class="fas fa-cart-plus"></i>Choose another product</a></span>
 		 </td>
-		 <div class="ajaxDiv"></div>
+		 
  	</tr>
 
 
@@ -159,12 +145,13 @@ function emptyCart(){
  ?>
 	<tr>
 		 <td colspan="3" align='right'><strong>Total:</strong></td>
-		 <td align='right'><strong><?php echo "$".$item_total; ?></strong></td>
-		 <td><a id="btnEmpty" onclick="emptyCart()" href="#"><i class="fas fa-trash"></i>Empty Cart</a></td>
+		 <td align='right' id="price"><strong><?php echo "$".$item_total; ?></strong></td>
+		 <td><button id="btnEmpty" onclick="emptyCart()" ><i class="fas fa-trash"></i>Empty Cart</button></td>
  	</tr>
  	</tbody>
  </table>
 </div>
+
 <?php 
  }else{
  	//daca nu exista nimic in cos, afisam un mesaj prietenos 
@@ -176,8 +163,6 @@ function emptyCart(){
  <div><a href="products.php" style="text-decoration: none; font-size: 20px;">Go back to shop</a></div>
  <div><a href="logout.php" style="text-decoration: none; font-size: 20px; ">Logout</a></div>
  <div><a href="order.php" style="float: right; font-size: 20px;color: green;" class="btnPlaceOrder">Place order</a></div>
-
-
 
  </body>
  </html>

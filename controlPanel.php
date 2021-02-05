@@ -41,11 +41,11 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 <button onclick="showDiv('lista-useri')">See all users</button>
 
 <!---div-ul pentru crearea unui produs nou---->
-<div id="lista" style="display:none;">
+<div id="lista">
 	<button onclick="showDiv('new-product')" class="create-product">
 		Create a new product
 	</button>
-	<div id="new-product">
+	<div id="new-product" style="display:none;">
 	<form action="addProduct.php" method="post">
 		<label for="product-name">
 		</label>

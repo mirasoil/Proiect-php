@@ -4,7 +4,7 @@ class Admin extends DBController{
 
 	function getAllProducts(){
 		//functie ce returneaza toate produsele din tabela
-		$query = "SELECT * FROM tbl_product";
+		$query = "SELECT * FROM tbl_product ORDER BY id DESC";
 
 		$productResult = $this->getDBResult($query);
 		foreach ($productResult as $key => $value) {
@@ -51,7 +51,7 @@ class Admin extends DBController{
 
 function getAllProductsNew(){
 		//functie ce returneaza toate produsele din tabela
-		$query = "SELECT * FROM tbl_product";
+		$query = "SELECT * FROM tbl_product ORDER BY id DESC";
 
 		$productResult = $this->getDBResult($query); //in variabila productResult stocam rezultatul query-ului aplicat in tbl_product
 		return $productResult;
@@ -74,9 +74,9 @@ function getAllProductsNew(){
 
 
 
-	function editProduct($id, $name, $code, $image, $price, $stock, $description){
+	function editProduct($id, $name, $code,  $price, $stock){
 		//modifica datele unui produs
-		$query = "UPDATE tbl_product SET  name=?, code=?, image=?, price=?, stock=?, description=? WHERE tbl_product.id='$id'";
+		$query = "UPDATE tbl_product SET  name=?, code=?,  price=?, stock=? WHERE id='$id'";
 
 		$params = array(
 			array(
@@ -87,10 +87,7 @@ function getAllProductsNew(){
 				"param_type" => "s",
 				"param_value" => $code
 			),
-			array(
-				"param_type" => "s",
-				"param_value" => $image
-			),
+			
 			array(
 				"param_type" => "d",
 				"param_value" => $price
@@ -99,10 +96,7 @@ function getAllProductsNew(){
 				"param_type" => "i",
 				"param_value" => $stock
 			),
-			array(
-				"param_type" => "s",
-				"param_value" => $description
-			)
+			
 		);
 
 		$this->updateDB($query, $params);

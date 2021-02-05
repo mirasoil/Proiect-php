@@ -1,5 +1,4 @@
-<?php include 'sections/header.sec.php'; ?>  
-
+<?php include 'sections/header.sec.php' ?>   
 <body>
 <?php 
 session_start();
@@ -32,7 +31,7 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 	<button onclick="showDiv('new-product')" class="create-product">
 		Create a new product
 	</button>
-	<div id="new-product" style="display: none;">
+	<div id="new-product">
 	<form action="addProduct.php" method="post">
 		<label for="product-name">
 		</label>
@@ -57,6 +56,7 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 		<button type="submit">Add Product </button>
 		</form>
 </div>
+<div id="rezervat"></div>
 	 	<?php 
  		$admin = new Admin();
  		$query = "SELECT * FROM tbl_product";
@@ -67,9 +67,10 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 
  			foreach($productResult as $key => $value){
 ?>
-<!--generarea produselor--->
-		 <div class="product-item" >
-			<form id="<?php echo 'myForm'.$productResult[$key]['id']; ?>" method="POST">
+<!--Daca utilizatorul doreste sa stie mai multe despre produs, va face click pe nume sau poza acestuia si va fi redirectionat pe pagina product.php?code=... -->
+		 <div class="product-item" id="products-show">
+			<form method="POST" id="<?php echo 'myForm'.$productResult[$key]['id']; ?>">
+				<!---Camp editabil alocat dinamic pentru fiecare proprietate--->
 				<!--am adaugat un input in care sa afisez id-ul ca sa il pot trimite in deleteProduct--->
 				<input type="hidden" name="product-id" id="product-id" value="<?php echo $productResult[$key]["id"]; ?>">
 
@@ -83,7 +84,7 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 					<img src="<?php echo $productResult[$key]["image"]; ?>" class="product-image" id="product-image">
 				</div>
 
-				<label for="product-image">Product Image</label>
+				<label for="pi">Product Image</label>
 				<input type="file" name="product-image"/>
 				<br>
 				
@@ -98,21 +99,19 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 				<label for="product-desc">Product Description</label>
 				<textarea rows="4" cols="50" name="product-desc" id="product-desc"><?php echo $productResult[$key]["description"]; ?></textarea>
 				<br>
-
 				<div class="product-action">
-					<input type="submit" name="update" id="<?php echo $productResult[$key]['id']; ?>" onclick="updateAjax(this.id)" value="Edit">
- 				</div>
- 			
- 			    <?php echo '<button id="'.$productResult[$key]['id'].'" onclick="deleteAjax(this.id)">Delete</button>'; ?>
-
- 			<!-- <button class="btn-primary">EDITEAZA</button> -->
+				<input type="submit"  value="Edit" class="btnEdit" name="edit-product" id="<?php echo $productResult[$key]['id']; ?>" onclick="updateAjax(this.id)"/>
+				<!-- <input type="submit"  value="Delete" class="btnDelete" id="btnDelete" name="delete-product"/>
+ -->			</div>
+ 			<?php echo '<input type="button" id="'.$productResult[$key]['id'].'" value="delete" name="del" onclick="deleteAjax(this.id)">'; ?>
 			</form>
-			
+			<button onclick="deleteAjax(<?php echo $productResult[$key]['id']; ?>" class="delete-btn">DELETE <?php echo $productResult[$key]['id']; ?></button>
 		</div> 
 <?php
  			}
  		}
- ?>
+
+?>
 </div>
 
 
@@ -134,19 +133,18 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 		<button type="submit" name="add-user">Add User </button><br>
 		</form>
 </div>
-<?php 
+	<?php 
 	$admin = new Admin();
 	//afisarea propriu-zisa a tuturor utilizatorilor din baza de date
 	$admin->getAllUsers(); 
-?>
+	?>
 	<div id="rezervatAfisare"></div>
 </div>
 </div>
-
+<div id="RezervatAfisare"></div>
 <div class="footer" style=" bottom: 0; width: 100%; padding: 0; margin: 0;">
-	<?php include 'sections/footer.sec.php'; ?>
+<?php include 'sections/footer.sec.php'; ?>
 </div>
-
 <script>
 //functie apelata intern pentru a face vizibil un div rezervat
 	function showDiv(id){
@@ -159,21 +157,155 @@ if(isset($_SESSION['loggedin']) && isset($_SESSION['accountType'])){//daca sunt 
 	}
 
 //Butonul Delete
- 	function deleteAjax(id){
+ 	/*function deleteAjax(id){
      	if(confirm('Are you sure ?')){
      		$.ajax({
      			type: "POST",
      			url : 'delete.php',
      			data:{delete_id:id},
      			success: function(data){
-     				$('#myForm'+id).remove();
+     				console.log('success');
      			}
      		});
      	}
-     }
+     }*/
 
 
-//Butonul de UPDATE functional cu refresh ??
+//Butonul de update - NOT WORKING
+	/*function updateAjax(id){
+		if(confirm("Are you sure you want to update this product ?")){
+			//var myform = document.getElementById("form1");
+    		//var fd = new FormData(myform);
+    		//var data = $('form1').serialize();
+			$.ajax({
+				type: "POST",
+				url: 'update.php',
+				data: $('#'+id+' input').serialize(),
+				success: function(data){
+					$('#'+id)[0].reset();
+				}
+			});
+		}
+	}*/
+
+//NOT WORKING
+/* $(document).ready(function () {
+    $('.btn-primary').click(function (e) {
+      e.preventDefault();
+      var id =30;
+      var editData = $('#form'+id+' input').serialize();
+      $.ajax
+        ({
+          type: "POST",
+          url: "update.php",
+          data: {editData: $('#form'+id).serialize()},
+          success: function (data) {
+            //$('.result').html(data);
+            console.log(editData);
+            $('#form'+id)[0].reset();
+            
+          }
+        });
+    });
+  });*/
+
+
+/*var editData = function(id){
+   //$('#'+id).load('update-form.php')
+
+    $.ajax({    
+        type: "GET",
+        url: "update-form.php", 
+        data:{editId:id},            
+        dataType: "html",                  
+        success: function(data){   
+
+          var productData=JSON.parse(data);  
+          $("input[name='name']").val(productData.name);               
+          $("input[name='code']").val(productData.code);
+          $("input[name='image']").val(productData.image);
+          $("input[name='price']").val(productData.price);
+          $("input[name='stock']").val(productData.stock);
+          $("input[name='description']").val(productData.description);
+           
+        }
+
+    });
+};
+
+
+
+$(document).on('submit','#form1',function(e){
+        e.preventDefault();
+        var id= $("input[name='id']").val(); 
+         var name= $("input[name='name']").val();               
+         var code= $("input[name='code']").val();
+         var image= $("input[name='image']").val();
+         var price= $("input[name='price']").val();
+         var stock= $("input[name='stock']").val();
+         var description= $("input[name='description']").val();
+        $.ajax({
+        method:"POST",
+        url: "update-form.php",
+        data:{
+          updateId:id,
+          name:name,
+          code:code,
+          image:image,
+          price:price,
+          stock:stock,
+          description:description
+
+        },
+        success: function(data){
+        $('.product-item').load('show-form.php');
+        $('#msg').html(data);
+   
+    }});
+});
+*/
+
+
+// function updateAjax1(id){
+//             $('#form1').validate({
+
+//                 submitHandler: function(form) {
+//                     $.ajax({
+//                         url: 'update.php',
+//                         type: 'POST',
+//                         data: $(form).serialize(),
+//                         success: function(response) {
+//                             console.log('success');
+//                         }            
+//                     });
+//                 }
+//             });
+// }
+
+//UPDATE
+/*function trimite(){
+	dateDeTrimis = preparaDate()
+	cerere = new XMLHttpRequest()
+	cerere.open("POST", 'update.php')
+	cerere.setRequestHeader("Content-Type", "application/json")
+	cerere.onreadystatechange = procesareRaspuns
+	cerere.send(dateDeTrimis)
+}
+function preparaDate(){
+	elementFormular = document.getElementById("myForm")
+	obiectFormular = new FormData(elementFormular)
+	obiectDate = {}
+	obiectFormular.forEach(function(valoare,cheie) {obiectDate[cheie]=valoare})
+	return JSON.stringify(obiectDate)
+
+	console.log(obiectDate[cheie]=valoare)
+}
+function procesareRaspuns(){
+	if((cerere.readyState==4)&&(cerere.status==200)){
+		raspuns = cerere.responseText
+		document.getElementById("rezervat").innerHTML=raspuns
+	}
+}*/
 function updateAjax(id){
 	zona = document.querySelector("#RezervatAfisare")
 	elementFormular = document.querySelector("#myForm"+id)
@@ -184,6 +316,7 @@ function updateAjax(id){
 		.then((data) => {console.log('Success:', data);
 	})
 }
+		
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
